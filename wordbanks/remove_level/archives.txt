@@ -1,0 +1,16 @@
+case_backup.zip
+logs_archive.zip
+evidence_bundle.tar.gz
+mail_export.zip
+endpoint_dump.tar.gz
+user_files.zip
+configs_backup.zip
+images_archive.zip
+reports_bundle.zip
+timeline_archive.tar.gz
+alerts_export.zip
+disk_sample.tar.gz
+memory_capture.zip
+packet_bundle.tar.gz
+ticket_export.zip
+profile_archive.zip

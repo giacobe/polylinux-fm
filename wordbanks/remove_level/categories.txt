@@ -1,0 +1,16 @@
+fruit
+documents
+logs
+images
+scripts
+reports
+configs
+archives
+invoices
+tickets
+profiles
+notes
+backups
+certificates
+exports
+media

@@ -1,0 +1,16 @@
+memo.docx
+agenda.docx
+minutes.docx
+policy.pdf
+briefing.pdf
+proposal.docx
+contract.pdf
+handbook.pdf
+statement.docx
+worksheet.xlsx
+summary.pdf
+outline.docx
+approval.pdf
+schedule.docx
+intake_form.pdf
+review_notes.docx

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+validator="/opt/fmlab/validators/$USER"
+
+if [ ! -x "$validator" ]; then
+    echo "No validator was found for $USER."
+    exit 1
+fi
+
+"$validator"
