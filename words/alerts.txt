@@ -1,0 +1,16 @@
+failed_login.csv
+malware_alert.csv
+phishing_report.csv
+blocked_ip.csv
+vpn_anomaly.csv
+dns_spike.csv
+edr_detection.csv
+firewall_alert.csv
+proxy_warning.csv
+admin_lockout.csv
+data_export.csv
+suspicious_email.csv
+credential_alert.csv
+endpoint_warning.csv
+policy_violation.csv
+cloud_notice.csv

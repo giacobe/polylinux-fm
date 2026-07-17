@@ -16,18 +16,14 @@ source=$log_base action=deny
 DATA
 done
 
-cat > "/opt/fmlab/validators/$levelToBuild" <<EOF
-#!/bin/sh
-home="/home/$levelToBuild"
-if [ -f "$home/evidence/$target_log" ] && [ -f "$home/evidence/$target_backup" ] && cmp -s "$home/evidence/$target_log" "$home/evidence/$target_backup"; then
-    echo "Level complete. Completion code: $completion_code"
-    echo "Run nextlevel when you are ready."
-    exit 0
-fi
-echo "Not yet. The evidence directory needs $target_backup to match $target_log, and the original log file must remain."
-exit 1
-EOF
-
 levelinstructions="The evidence directory contains several named logs. It needs a backup copy named $target_backup that matches $target_log, and the original log file must remain. This level practices cp. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
+
+prepare_level_home
+run_as_level_user "cp '$home/evidence/$target_log' '$home/evidence/$target_backup'"
+expected_hash=$(state_hash "$home")
+rm -f "$home/evidence/$target_backup"
+
+write_hash_validator
+
 finish_level

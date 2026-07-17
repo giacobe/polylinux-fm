@@ -1,0 +1,16 @@
+auth.log
+firewall.log
+proxy.log
+dns.log
+vpn.log
+mail.log
+system.log
+kernel.log
+access.log
+error.log
+audit.log
+endpoint.log
+database.log
+wireless.log
+cloud.log
+scanner.log

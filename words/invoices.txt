@@ -1,0 +1,16 @@
+invoice_january.pdf
+invoice_february.pdf
+invoice_march.pdf
+invoice_april.pdf
+invoice_may.pdf
+invoice_june.pdf
+invoice_july.pdf
+invoice_august.pdf
+invoice_september.pdf
+invoice_october.pdf
+invoice_november.pdf
+invoice_december.pdf
+vendor_invoice.pdf
+services_invoice.pdf
+hardware_invoice.pdf
+software_invoice.pdf

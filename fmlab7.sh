@@ -4,9 +4,10 @@ cd "$origInstallDir" || exit 1
 . ./resources.sh
 home="/home/$levelToBuild"
 backup_id=$(echo "$level_HASH" | cut -c 6)
+backup_dir_id=$(echo "$level_HASH" | cut -c 7)
 target_base=$(log_name "$backup_id")
 target_log="$target_base.log"
-target_backup_dir="case_backup"
+target_backup_dir=$(backup_dir_name "$backup_dir_id")
 mkdir -p "$home/evidence"
 for hex in $hex_options; do
     log_base=$(log_name "$hex")
@@ -17,18 +18,15 @@ for hex in $hex_options; do
 DATA
 done
 
-cat > "/opt/fmlab/validators/$levelToBuild" <<EOF
-#!/bin/sh
-home="/home/$levelToBuild"
-if [ -d "$home/$target_backup_dir" ] && [ -f "$home/evidence/$target_log" ] && [ -f "$home/$target_backup_dir/$target_log" ] && cmp -s "$home/evidence/$target_log" "$home/$target_backup_dir/$target_log"; then
-    echo "Level complete. Completion code: $completion_code"
-    echo "Run nextlevel when you are ready."
-    exit 0
-fi
-echo "Not yet. $target_backup_dir should contain $target_log, and evidence/$target_log should still exist."
-exit 1
-EOF
-
 levelinstructions="The evidence folder contains named logs. The selected log, $target_log, needs a preserved copy inside $target_backup_dir, and the original should remain in evidence. This level combines mkdir and cp. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
+
+prepare_level_home
+run_as_level_user "mkdir '$home/$target_backup_dir'"
+run_as_level_user "cp '$home/evidence/$target_log' '$home/$target_backup_dir/$target_log'"
+expected_hash=$(state_hash "$home")
+rm -rf "$home/$target_backup_dir"
+
+write_hash_validator
+
 finish_level

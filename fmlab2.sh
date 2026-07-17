@@ -14,19 +14,14 @@ for hex in $hex_options; do
     fi
 done
 
-cat > "/opt/fmlab/validators/$levelToBuild" <<EOF
-#!/bin/sh
-home="/home/$levelToBuild"
-target_case="$target_case"
-if [ -d "$home/workspace/$target_case" ]; then
-    echo "Level complete. Completion code: $completion_code"
-    echo "Run nextlevel when you are ready."
-    exit 0
-fi
-echo "Not yet. The workspace directory is still missing $target_case."
-exit 1
-EOF
-
 levelinstructions="The workspace directory is missing one case folder named $target_case. Add that folder to workspace, then run validate. This level practices mkdir."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
+
+prepare_level_home
+run_as_level_user "mkdir '$home/workspace/$target_case'"
+expected_hash=$(state_hash "$home")
+rmdir "$home/workspace/$target_case"
+
+write_hash_validator
+
 finish_level

@@ -20,23 +20,14 @@ for hex in $hex_options; do
     fi
 done
 
-cat > "/opt/fmlab/validators/$levelToBuild" <<EOF
-#!/bin/sh
-home="/home/$levelToBuild"
-ok=1
-[ ! -e "$home/cases/$target_old" ] || ok=0
-for required_dir in $required_active; do
-    [ -f "$home/cases/\$required_dir/notes.txt" ] || ok=0
-done
-if [ "\$ok" -eq 1 ]; then
-    echo "Level complete. Completion code: $completion_code"
-    echo "Run nextlevel when you are ready."
-    exit 0
-fi
-echo "Not yet. cases/$target_old should be gone, and the active case folders should still have their notes."
-exit 1
-EOF
-
 levelinstructions="The cases directory contains readable case folders. The empty old case directory is cases/$target_old. That old case should be gone, while active cases with notes should stay. This level practices rmdir. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
+
+prepare_level_home
+run_as_level_user "rmdir '$home/cases/$target_old'"
+expected_hash=$(state_hash "$home")
+mkdir -p "$home/cases/$target_old"
+
+write_hash_validator
+
 finish_level

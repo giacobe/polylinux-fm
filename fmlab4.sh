@@ -12,18 +12,14 @@ for hex in $hex_options; do
 done
 echo "suspicious binary sample" > "$home/downloads/$target_threat"
 
-cat > "/opt/fmlab/validators/$levelToBuild" <<EOF
-#!/bin/sh
-home="/home/$levelToBuild"
-if [ -f "$home/quarantine/$target_threat" ] && [ ! -e "$home/downloads/$target_threat" ] && [ -f "$home/downloads/browser_setup.exe" ] && [ -f "$home/downloads/vpn_client.exe" ]; then
-    echo "Level complete. Completion code: $completion_code"
-    echo "Run nextlevel when you are ready."
-    exit 0
-fi
-echo "Not yet. $target_threat should be in quarantine, no longer in downloads, and the normal downloads should remain."
-exit 1
-EOF
-
 levelinstructions="The downloads folder contains normal-looking files and one suspicious file: $target_threat. That suspicious file should end up in quarantine, and the other downloads should stay in place. This level practices mv. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
+
+prepare_level_home
+run_as_level_user "mv '$home/downloads/$target_threat' '$home/quarantine/$target_threat'"
+expected_hash=$(state_hash "$home")
+mv "$home/quarantine/$target_threat" "$home/downloads/$target_threat"
+
+write_hash_validator
+
 finish_level

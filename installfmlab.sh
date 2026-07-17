@@ -1,5 +1,7 @@
 #!/bin/sh
 
+umask 022
+
 export SYSTEM_PASSWORD="systemPassword"
 export currentDate=$(date +"%m-%d-%Y" | head -n 1)
 
@@ -30,7 +32,6 @@ for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
     echo -n "$levelnumber "
     export levelToBuild="$levelsetname$levelnumber"
     export level_HASH=$(echo -n "$USER_ID$currentDate$SYSTEM_PASSWORD$levelToBuild" | sha256sum | cut -d ' ' -f 1)
-    export completion_code=$(echo "$level_HASH" | cut -c 1-10)
     export readMeLocation="$levelToBuild/README.txt"
 
     adduser -D -g "User" "$levelToBuild"
