@@ -20,6 +20,4 @@ run_as_level_user "mv '$home/downloads/$target_threat' '$home/quarantine/$target
 expected_hash=$(state_hash "$home")
 mv "$home/quarantine/$target_threat" "$home/downloads/$target_threat"
 
-write_hash_validator
 
-finish_level

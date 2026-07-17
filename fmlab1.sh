@@ -20,6 +20,4 @@ run_as_level_user "touch '$home/evidence/$target_summary'"
 expected_hash=$(state_hash "$home")
 rm -f "$home/evidence/$target_summary"
 
-write_hash_validator
 
-finish_level

@@ -33,6 +33,4 @@ run_as_level_user "cp '$home/$target_notes' '$home/$target_root/$target_backup_d
 expected_hash=$(state_hash "$home")
 rm -rf "$home/$target_root"
 
-write_hash_validator
 
-finish_level

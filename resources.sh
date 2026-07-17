@@ -362,70 +362,24 @@ state_hash() {
 
     (
         cd "$target_dir" || exit 1
-        find . ! -name ".ash_history" -exec ls -ld {} \; |
-        grep -v '\.ash_history' |
-        awk '{
-            item_mode = $1
-            item_owner = $3
-            item_group = $4
-            item_size = $5
-            item_name = $9
-            if (substr(item_mode, 1, 1) == "d") {
-                item_size = 0
-            }
-            print item_mode, item_owner, item_group, item_size, item_name
-        }' |
-        sed 's# \./# #' |
-        sort |
+        find . ! -name ".ash_history" -exec sh -c '
+            item_name=$1
+            item_mode=$(stat -c "%A" "$item_name")
+            item_owner=$(stat -c "%U" "$item_name")
+            item_group=$(stat -c "%G" "$item_name")
+            if [ -d "$item_name" ]; then
+                item_size=0
+            else
+                item_size=$(stat -c "%s" "$item_name")
+            fi
+            printf "%s\t%s\t%s\t%s\t%s\0" \
+                "$item_mode" "$item_owner" "$item_group" "$item_size" "$item_name"
+        ' sh {} \; |
+        sort -z |
         sha256sum |
         awk '{print $1}' |
         base64 |
         tr -d '\n' |
         cut -c 1-10
     )
-}
-
-write_hash_validator() {
-    cat > "/opt/fmlab/validators/$levelToBuild" <<EOF
-#!/bin/sh
-
-state_hash() {
-    target_dir="\$1"
-
-    (
-        cd "\$target_dir" || exit 1
-        find . ! -name ".ash_history" -exec ls -ld {} \; |
-        grep -v '\.ash_history' |
-        awk '{
-            item_mode = \$1
-            item_owner = \$3
-            item_group = \$4
-            item_size = \$5
-            item_name = \$9
-            if (substr(item_mode, 1, 1) == "d") {
-                item_size = 0
-            }
-            print item_mode, item_owner, item_group, item_size, item_name
-        }' |
-        sed 's# \./# #' |
-        sort |
-        sha256sum |
-        awk '{print \$1}' |
-        base64 |
-        tr -d '\n' |
-        cut -c 1-10
-    )
-}
-
-home="/home/$levelToBuild"
-actual_hash=\$(state_hash "\$home")
-
-echo "Your key is: \$actual_hash"
-exit 0
-EOF
-}
-
-finish_level() {
-    prepare_level_home
-    chmod 755 "/opt/fmlab/validators/$levelToBuild"
 }

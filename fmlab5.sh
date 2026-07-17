@@ -37,6 +37,4 @@ run_as_level_user "rm '$home/$target_dir/$target_bad'"
 expected_hash=$(state_hash "$home")
 echo "out-of-place item from $bad_source" > "$home/$target_dir/$target_bad"
 
-write_hash_validator
 
-finish_level

@@ -55,6 +55,4 @@ rmdir "$home/incident/$target_backup_dir" "$home/incident/$target_quarantine_dir
 echo "unrelated file: $unrelated_file" > "$home/incident/$unrelated_file"
 mkdir -p "$home/incident/$target_empty_dir"
 
-write_hash_validator
 
-finish_level

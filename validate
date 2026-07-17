@@ -1,10 +1,37 @@
 #!/bin/sh
 
-validator="/opt/fmlab/validators/$USER"
+state_hash() {
+    target_dir="$1"
 
-if [ ! -x "$validator" ]; then
-    echo "No validator was found for $USER."
+    (
+        cd "$target_dir" || exit 1
+        find . ! -name ".ash_history" -exec sh -c '
+            item_name=$1
+            item_mode=$(stat -c "%A" "$item_name")
+            item_owner=$(stat -c "%U" "$item_name")
+            item_group=$(stat -c "%G" "$item_name")
+            if [ -d "$item_name" ]; then
+                item_size=0
+            else
+                item_size=$(stat -c "%s" "$item_name")
+            fi
+            printf "%s\t%s\t%s\t%s\t%s\0" \
+                "$item_mode" "$item_owner" "$item_group" "$item_size" "$item_name"
+        ' sh {} \; |
+        sort -z |
+        sha256sum |
+        awk '{print $1}' |
+        base64 |
+        tr -d '\n' |
+        cut -c 1-10
+    )
+}
+
+level_home="/home/$USER"
+if [ ! -d "$level_home" ]; then
+    echo "No level home was found for $USER."
     exit 1
 fi
 
-"$validator"
+actual_hash=$(state_hash "$level_home")
+echo "Your key is: $actual_hash"

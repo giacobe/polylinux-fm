@@ -28,6 +28,4 @@ run_as_level_user "rmdir '$home/cases/$target_old'"
 expected_hash=$(state_hash "$home")
 mkdir -p "$home/cases/$target_old"
 
-write_hash_validator
 
-finish_level

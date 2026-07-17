@@ -22,6 +22,4 @@ expected_hash=$(state_hash "$home")
 mv "$home/$target_dir/$target_file" "$home/$target_file"
 rmdir "$home/$target_dir"
 
-write_hash_validator
 
-finish_level

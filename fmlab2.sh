@@ -22,6 +22,4 @@ run_as_level_user "mkdir '$home/workspace/$target_case'"
 expected_hash=$(state_hash "$home")
 rmdir "$home/workspace/$target_case"
 
-write_hash_validator
 
-finish_level

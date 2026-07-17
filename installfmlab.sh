@@ -6,7 +6,7 @@ export SYSTEM_PASSWORD="systemPassword"
 export currentDate=$(date +"%m-%d-%Y" | head -n 1)
 
 confirmation="no"
-while [ "$confirmation" != "y" ]; do
+while [ "$confirmation" != "y" ] && [ "$confirmation" != "Y" ]; do
     export USER_ID=""
     echo "Enter your email address (e.g. xyz1234@psu.edu): "
     read USER_ID
@@ -15,9 +15,6 @@ while [ "$confirmation" != "y" ]; do
 done
 
 mkdir -p /home
-mkdir -p /opt/fmlab/validators
-chmod 755 /opt /opt/fmlab /opt/fmlab/validators
-
 cp profile /etc/profile
 cp nextlevel /usr/bin/nextlevel
 cp prevlevel /usr/bin/prevlevel
@@ -28,6 +25,7 @@ export origInstallDir=$(pwd)
 levelsetname="fmlab"
 
 echo -n "Building levels [ "
+builder_pids=""
 for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
     echo -n "$levelnumber "
     export levelToBuild="$levelsetname$levelnumber"
@@ -42,10 +40,21 @@ for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
     echo "***************************************" >> "/home/$readMeLocation"
     echo "* Instructions for this level:        *" >> "/home/$readMeLocation"
 
-    "$origInstallDir/$levelsetname$levelnumber.sh"
-    cd "$origInstallDir" || exit 1
+    "$origInstallDir/$levelsetname$levelnumber.sh" &
+    builder_pids="$builder_pids $!"
 done
 echo "]"
+
+for builder_pid in $builder_pids; do
+    wait "$builder_pid"
+done
+
+for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
+    level_home="/home/fmlab$levelnumber"
+    chown -R "fmlab$levelnumber:fmlab$levelnumber" "$level_home"
+    chmod -R o-rx "$level_home"
+done
+
 echo "done"
 
 su - fmlab1

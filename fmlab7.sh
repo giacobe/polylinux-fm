@@ -27,6 +27,4 @@ run_as_level_user "cp '$home/evidence/$target_log' '$home/$target_backup_dir/$ta
 expected_hash=$(state_hash "$home")
 rm -rf "$home/$target_backup_dir"
 
-write_hash_validator
 
-finish_level
