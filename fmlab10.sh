@@ -36,23 +36,7 @@ for hex in $hex_options; do
 done
 mkdir -p "$home/incident/$target_empty_dir"
 
-levelinstructions="Complete the incident response workflow inside incident. The $target_backup_log log needs a matching backup copy inside $target_backup_dir, $target_quarantine_log should be moved into $target_quarantine_dir, $unrelated_file should be removed, the empty folder $target_empty_dir should be gone, and a completion marker named $target_marker should exist in incident. This final level combines mkdir, cp, mv, rm, rmdir, and touch. Run validate when finished."
+levelinstructions="Complete the incident response workflow inside incident. Copy $target_backup_log into $target_backup_dir, move $target_quarantine_log into $target_quarantine_dir, remove $unrelated_file, remove the empty directory $target_empty_dir, and create a completion marker named $target_marker in incident. This final level combines mkdir, cp, mv, rm, rmdir, and touch. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "mkdir '$home/incident/$target_backup_dir'"
-run_as_level_user "mkdir '$home/incident/$target_quarantine_dir'"
-run_as_level_user "cp '$home/incident/$target_backup_log' '$home/incident/$target_backup_dir/$target_backup_log'"
-run_as_level_user "mv '$home/incident/$target_quarantine_log' '$home/incident/$target_quarantine_dir/$target_quarantine_log'"
-run_as_level_user "rm '$home/incident/$unrelated_file'"
-run_as_level_user "rmdir '$home/incident/$target_empty_dir'"
-run_as_level_user "touch '$home/incident/$target_marker'"
-expected_hash=$(state_hash "$home")
-mv "$home/incident/$target_quarantine_dir/$target_quarantine_log" "$home/incident/$target_quarantine_log"
-rm -f "$home/incident/$target_backup_dir/$target_backup_log"
-rm -f "$home/incident/$target_marker"
-rmdir "$home/incident/$target_backup_dir" "$home/incident/$target_quarantine_dir"
-echo "unrelated file: $unrelated_file" > "$home/incident/$unrelated_file"
-mkdir -p "$home/incident/$target_empty_dir"
-
-
+finish_level

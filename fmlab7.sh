@@ -18,13 +18,7 @@ for hex in $hex_options; do
 DATA
 done
 
-levelinstructions="The evidence folder contains named logs. The selected log, $target_log, needs a preserved copy inside $target_backup_dir, and the original should remain in evidence. This level combines mkdir and cp. Run validate when finished."
+levelinstructions="The evidence directory contains named logs. Copy the selected log, $target_log, into $target_backup_dir, and leave the original in evidence. This level combines mkdir and cp. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "mkdir '$home/$target_backup_dir'"
-run_as_level_user "cp '$home/evidence/$target_log' '$home/$target_backup_dir/$target_log'"
-expected_hash=$(state_hash "$home")
-rm -rf "$home/$target_backup_dir"
-
-
+finish_level

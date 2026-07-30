@@ -3,18 +3,47 @@
 umask 022
 
 export SYSTEM_PASSWORD="systemPassword"
-export currentDate=$(date +"%m-%d-%Y" | head -n 1)
+currentDate=$(date +"%m-%d-%Y" | head -n 1)
+export currentDate
+
+existing_install="no"
+for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
+    if [ -d "/home/fmlab$levelnumber" ] || grep -q "^fmlab$levelnumber:" /etc/passwd 2>/dev/null; then
+        existing_install="yes"
+    fi
+done
+
+if [ -d /opt/fmlab ]; then
+    existing_install="yes"
+fi
+
+if [ "$existing_install" = "yes" ]; then
+    echo "An existing File Manipulation Lab install was found."
+    echo "Run sh cleanup.sh before installing again."
+    exit 1
+fi
 
 confirmation="no"
-while [ "$confirmation" != "y" ] && [ "$confirmation" != "Y" ]; do
+while :; do
     export USER_ID=""
     echo "Enter your email address (e.g. xyz1234@psu.edu): "
     read USER_ID
     printf "Is %s your email address? (y/n) " "$USER_ID"
     read confirmation
+    case "$confirmation" in
+        y|Y) break ;;
+    esac
 done
 
 mkdir -p /home
+mkdir -p /opt/fmlab
+chmod 755 /opt /opt/fmlab
+
+if [ -f /etc/profile ]; then
+    cp /etc/profile /opt/fmlab/profile.backup
+    chmod 600 /opt/fmlab/profile.backup
+fi
+
 cp profile /etc/profile
 cp nextlevel /usr/bin/nextlevel
 cp prevlevel /usr/bin/prevlevel
@@ -23,9 +52,9 @@ chmod 755 /usr/bin/nextlevel /usr/bin/prevlevel /usr/bin/validate
 
 export origInstallDir=$(pwd)
 levelsetname="fmlab"
+failed_levels=""
 
 echo -n "Building levels [ "
-builder_pids=""
 for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
     echo -n "$levelnumber "
     export levelToBuild="$levelsetname$levelnumber"
@@ -40,20 +69,20 @@ for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
     echo "***************************************" >> "/home/$readMeLocation"
     echo "* Instructions for this level:        *" >> "/home/$readMeLocation"
 
-    "$origInstallDir/$levelsetname$levelnumber.sh" &
-    builder_pids="$builder_pids $!"
+    if "$origInstallDir/$levelsetname$levelnumber.sh"; then
+        :
+    else
+        failed_levels="$failed_levels $levelToBuild"
+    fi
+    cd "$origInstallDir" || exit 1
 done
 echo "]"
 
-for builder_pid in $builder_pids; do
-    wait "$builder_pid"
-done
-
-for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
-    level_home="/home/fmlab$levelnumber"
-    chown -R "fmlab$levelnumber:fmlab$levelnumber" "$level_home"
-    chmod -R o-rx "$level_home"
-done
+if [ -n "$failed_levels" ]; then
+    echo "Build failed for:$failed_levels"
+    echo "Run sh cleanup.sh, fix the errors above, then install again."
+    exit 1
+fi
 
 echo "done"
 

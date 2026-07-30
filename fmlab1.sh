@@ -12,12 +12,7 @@ for hex in $hex_options; do
     echo "Reference note for $note_file" > "$home/evidence/$note_file"
 done
 
-levelinstructions="The evidence directory needs a new file named $target_summary. The folder has other reference notes with normal filenames, but only $target_summary is required. This level practices touch. Run validate when finished."
+levelinstructions="The evidence directory needs a new file named $target_summary. The directory has other reference notes with normal filenames, but only $target_summary is required. This level practices touch. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "touch '$home/evidence/$target_summary'"
-expected_hash=$(state_hash "$home")
-rm -f "$home/evidence/$target_summary"
-
-
+finish_level

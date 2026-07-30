@@ -29,12 +29,7 @@ done < "$wordbank_root/$target_dir.txt"
 
 echo "out-of-place item from $bad_source" > "$home/$target_dir/$target_bad"
 
-levelinstructions="The $target_dir directory contains files that belong together. One file came from a different category and does not fit. The out-of-place file should be gone, and the correct files should stay. This level practices rm. Run validate when finished."
+levelinstructions="The $target_dir directory contains files that belong together. One file came from a different category and does not fit. Remove the out-of-place file, and leave the correct files in place. This level practices rm. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "rm '$home/$target_dir/$target_bad'"
-expected_hash=$(state_hash "$home")
-echo "out-of-place item from $bad_source" > "$home/$target_dir/$target_bad"
-
-
+finish_level

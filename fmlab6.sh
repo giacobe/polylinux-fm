@@ -20,12 +20,7 @@ for hex in $hex_options; do
     fi
 done
 
-levelinstructions="The cases directory contains readable case folders. The empty old case directory is cases/$target_old. That old case should be gone, while active cases with notes should stay. This level practices rmdir. Run validate when finished."
+levelinstructions="The cases directory contains readable case directories. The empty old case directory is cases/$target_old. Remove that old case directory, and leave active cases with notes in place. This level practices rmdir. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "rmdir '$home/cases/$target_old'"
-expected_hash=$(state_hash "$home")
-mkdir -p "$home/cases/$target_old"
-
-
+finish_level

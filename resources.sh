@@ -353,33 +353,6 @@ prepare_level_home() {
     chmod -R o-rx "/home/$levelToBuild"
 }
 
-run_as_level_user() {
-    su "$levelToBuild" -c "$1"
-}
-
-state_hash() {
-    target_dir="$1"
-
-    (
-        cd "$target_dir" || exit 1
-        find . ! -name ".ash_history" -exec sh -c '
-            item_name=$1
-            item_mode=$(stat -c "%A" "$item_name")
-            item_owner=$(stat -c "%U" "$item_name")
-            item_group=$(stat -c "%G" "$item_name")
-            if [ -d "$item_name" ]; then
-                item_size=0
-            else
-                item_size=$(stat -c "%s" "$item_name")
-            fi
-            printf "%s\t%s\t%s\t%s\t%s\0" \
-                "$item_mode" "$item_owner" "$item_group" "$item_size" "$item_name"
-        ' sh {} \; |
-        sort -z |
-        sha256sum |
-        awk '{print $1}' |
-        base64 |
-        tr -d '\n' |
-        cut -c 1-10
-    )
+finish_level() {
+    prepare_level_home
 }

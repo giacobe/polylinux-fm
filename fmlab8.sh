@@ -12,14 +12,7 @@ for hex in $hex_options; do
     echo "user activity: $log_file" > "$home/$log_file"
 done
 
-levelinstructions="Your home directory contains readable user log files, such as admins.log and vendors.log. The selected log, $target_file, should be archived inside $target_dir and no longer remain in your home directory. This level combines mkdir and mv. Run validate when finished."
+levelinstructions="Your home directory contains readable user log files, such as admins.log and vendors.log. Move the selected log, $target_file, into $target_dir so it no longer remains in your home directory. This level combines mkdir and mv. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "mkdir '$home/$target_dir'"
-run_as_level_user "mv '$home/$target_file' '$home/$target_dir/$target_file'"
-expected_hash=$(state_hash "$home")
-mv "$home/$target_dir/$target_file" "$home/$target_file"
-rmdir "$home/$target_dir"
-
-
+finish_level

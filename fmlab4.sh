@@ -12,12 +12,7 @@ for hex in $hex_options; do
 done
 echo "suspicious binary sample" > "$home/downloads/$target_threat"
 
-levelinstructions="The downloads folder contains normal-looking files and one suspicious file: $target_threat. That suspicious file should end up in quarantine, and the other downloads should stay in place. This level practices mv. Run validate when finished."
+levelinstructions="The downloads directory contains normal-looking files and one suspicious file: $target_threat. Move that suspicious file into quarantine, and leave the other downloads in place. This level practices mv. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "mv '$home/downloads/$target_threat' '$home/quarantine/$target_threat'"
-expected_hash=$(state_hash "$home")
-mv "$home/quarantine/$target_threat" "$home/downloads/$target_threat"
-
-
+finish_level

@@ -7,7 +7,7 @@ form_url: ""
 
 ## START: File Manipulation Lab
 
-In this lab you will practice core Linux file manipulation skills. Each level gives you a small filesystem task, such as creating a file, making a directory, copying evidence, moving suspicious files, removing incorrect files, and organizing an incident response workspace.
+In this lab you will practice core Linux file manipulation skills. Each level gives you a small filesystem task, such as creating a file, creating a directory, copying evidence, moving suspicious files, removing incorrect files, and organizing an incident response workspace.
 
 Throughout the lab:
 
@@ -19,7 +19,7 @@ Throughout the lab:
 
 **Let's get started!**
 
-## LOGIN: Get On the Machine
+## LOGIN: Get on the machine
 
 Wait for the VM on the right to finish booting. Once the login prompt appears, log in.
 
@@ -39,7 +39,7 @@ sh installfmlab.sh
 
 Enter your email address when prompted. Your exact email address and the VM's current date generate your personalized level targets. Wait until the installer prints `done` and places you in `fmlab1` before entering level commands.
 
-## REF: Quick Reference
+## REF: Quick reference
 
 | Task | Command |
 | --- | --- |
@@ -47,7 +47,7 @@ Enter your email address when prompted. Your exact email address and the VM's cu
 | List files and directories | `ls` |
 | List details, including permissions and owner | `ls -l` |
 | List hidden files too | `ls -la` |
-| Return to your current level's home directory | `cd` |
+| Return to the current level's home directory | `cd` |
 | Change into a directory | `cd <directory>` |
 | Move back up one directory | `cd ..` |
 | Display a text file | `cat <filename>` |
@@ -64,7 +64,7 @@ Enter your email address when prompted. Your exact email address and the VM's cu
 
 Replace every angle-bracket placeholder with the actual name or path. Do not type the angle brackets literally.
 
-## INST: Working Through a Level
+## INST: Working through a level
 
 Each level starts in its own home directory, `/home/fmlabN`, where `N` is the level number. Before changing anything, return home, confirm your location, and read `README.txt`:
 
@@ -96,9 +96,9 @@ nextlevel
 
 ## INST: Validation
 
-The shared `validate` command always examines the current level user's entire home directory, regardless of your current working directory. It prints a key but does not display a correct or incorrect status.
+The `validate` command always examines the current level user's entire home directory, regardless of your current working directory. It prints a key but does not display a correct or incorrect status.
 
-The key is generated from filename-safe filesystem records containing complete names—including names with spaces—sizes, permissions, owner, group, and directory structure. Dates and times are ignored. File contents are not hashed directly, but a content change that changes a file's size changes the key.
+The key is generated from a cleaned recursive file listing built with common shell tools. Full displayed paths, including ordinary spaces in filenames, sizes, permissions, owner, group, and directory structure affect the key. Dates and times are ignored. File contents are not hashed directly, but a content change that changes a file's size changes the key.
 
 Extra files, missing files, renamed files, permission changes, ownership changes, and changes to `README.txt` produce a different key. Change only what the level requires. If your instructor uses a form, submit the key printed by `validate`.
 
@@ -106,7 +106,7 @@ Extra files, missing files, renamed files, permission changes, ownership changes
 
 ### Goal
 
-Create the required summary file named in `README.txt` inside the `evidence` directory.
+Create the required summary file inside the `evidence` directory.
 
 ### Skills practiced
 
@@ -143,7 +143,7 @@ Enter the command `nextlevel`.
 
 ### Goal
 
-Add the missing case directory to the workspace directory.
+Add the missing case directory to the `workspace` directory.
 
 ### Skills practiced
 
@@ -180,7 +180,7 @@ Enter the command `nextlevel`.
 
 ### Goal
 
-Make a backup copy of the selected log while keeping the original log file.
+Copy the selected log to the required backup filename while keeping the original log file.
 
 ### Skills practiced
 
@@ -240,7 +240,7 @@ Move only the suspicious file named in `README.txt`, preserving its filename:
 
 ```text
 downloads/<suspicious-file>
-    -> quarantine/<suspicious-file>
+-> quarantine/<suspicious-file>
 ```
 
 The suspicious file must no longer remain in `downloads`. Leave every normal download in place, then validate.
@@ -325,12 +325,12 @@ Enter the command `nextlevel`.
 
 ### Goal
 
-Create a backup directory and place a preserved copy of the selected log inside it.
+Create the selected backup directory and place a preserved copy of the selected log inside it.
 
 ### Skills practiced
 
 - Creating directories
-- Copying files into a backup location
+- Copying files into a backup directory
 - Combining `mkdir` and `cp`
 
 ### Suggested approach
@@ -342,7 +342,7 @@ ls
 ls evidence
 ```
 
-Create the backup directory directly in your level home—not inside `evidence`—and copy the selected log into it:
+Create the backup directory directly in your level home, not inside `evidence`, and copy the selected log into it:
 
 ```text
 evidence/<selected-log>
@@ -363,12 +363,12 @@ Enter the command `nextlevel`.
 
 ### Goal
 
-Archive the selected user log into the named archive directory.
+Move the selected user log into the named archive directory.
 
 ### Skills practiced
 
 - Creating an archive directory
-- Moving files into an archive location
+- Moving files into an archive directory
 - Combining `mkdir` and `mv`
 
 ### Suggested approach
@@ -399,7 +399,7 @@ Enter the command `nextlevel`.
 
 ### Goal
 
-Build the requested investigation structure and preserve a backup copy of the case notes.
+Build the requested investigation structure and preserve a backup copy of the selected notes file.
 
 ### Skills practiced
 
@@ -413,6 +413,7 @@ Read the investigation structure and notes filename from `README.txt`, then insp
 
 ```bash
 ls
+ls templates
 cat <notes-filename-from-README>
 ```
 
@@ -445,7 +446,7 @@ Complete the incident response workflow.
 
 - Creating directories
 - Copying evidence
-- Moving/quarantining logs
+- Moving and quarantining logs
 - Removing unrelated files
 - Removing an empty directory
 - Creating a completion marker file
@@ -479,6 +480,4 @@ Run `validate` and submit the key if your instructor asks for it.
 
 ### End of lab
 
-After you finish level 10 and record your key, you have completed the File Manipulation Lab.
-
-If you run `nextlevel`, the system reports that you are already at the highest level. Running it is not required to finish the lab.
+After you finish level 10 and record your key, you have completed the File Manipulation Lab. Running `nextlevel` from level 10 is not required; it will report that you are already at the final level.

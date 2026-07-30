@@ -19,9 +19,4 @@ done
 levelinstructions="The evidence directory contains several named logs. It needs a backup copy named $target_backup that matches $target_log, and the original log file must remain. This level practices cp. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "cp '$home/evidence/$target_log' '$home/evidence/$target_backup'"
-expected_hash=$(state_hash "$home")
-rm -f "$home/evidence/$target_backup"
-
-
+finish_level

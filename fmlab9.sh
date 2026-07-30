@@ -22,15 +22,7 @@ Case $case_slug opened for suspicious login activity.
 Preserve notes before deeper investigation.
 DATA
 
-levelinstructions="Build the investigation structure $target_root. It should contain $target_evidence_dir and $target_backup_dir folders, and the $target_backup_dir folder should contain a preserved copy of $target_notes. This level combines mkdir and cp. Run validate when finished."
+levelinstructions="Build the investigation structure $target_root. It should contain $target_evidence_dir and $target_backup_dir directories, and the $target_backup_dir directory should contain a copied version of $target_notes. This level combines mkdir and cp. Run validate when finished."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
-prepare_level_home
-run_as_level_user "mkdir '$home/$target_root'"
-run_as_level_user "mkdir '$home/$target_root/$target_evidence_dir'"
-run_as_level_user "mkdir '$home/$target_root/$target_backup_dir'"
-run_as_level_user "cp '$home/$target_notes' '$home/$target_root/$target_backup_dir/$target_notes'"
-expected_hash=$(state_hash "$home")
-rm -rf "$home/$target_root"
-
-
+finish_level
