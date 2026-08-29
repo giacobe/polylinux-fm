@@ -36,3 +36,25 @@ sh cleanup.sh
 ```
 
 Grading is intended to happen outside the VM. Students submit the key printed by `validate`, and the external form or Power Automate workflow can compare submitted keys against expected values.
+
+## Build the browser VM
+
+Use the `basic` configuration from
+[`giacobe/buildroot-builder2`](https://github.com/giacobe/buildroot-builder2),
+validated with Buildroot `2025.02.15`:
+
+```sh
+git clone https://github.com/giacobe/buildroot-builder2.git
+cd buildroot-builder2
+BUILDROOT_VERSION=2025.02.15 scripts/01-setup-buildroot.sh
+scripts/02-build-baseline.sh --config basic
+scripts/03-package-payload.sh \
+  --repo https://github.com/giacobe/polylinux-fm.git \
+  --ref main \
+  --baseline artifacts/basic-<timestamp> \
+  --output artifacts/polylinux-fm \
+  --output-prefix polylinux-fm
+```
+
+Replace `<timestamp>` with the stage-2 artifact directory. Review the manifest
+and boot-test the exact generated image pair in v86 before publishing.
