@@ -16,7 +16,7 @@ source=$log_base action=deny
 DATA
 done
 
-levelinstructions="The evidence directory contains several named logs. It needs a backup copy named $target_backup that matches $target_log, and the original log file must remain. This level practices cp. Run validate when finished."
+levelinstructions="The evidence directory contains several named logs. It needs a backup copy named $target_backup that matches $target_log, and the original log file must remain. This level practices cp. Record the requested filename or directory name for the external answer form."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
 finish_level

@@ -1,89 +1,64 @@
 #!/bin/sh
+set -eu
 
-umask 022
+cd "$(dirname "$0")"
+INSTALL_ROOT=$(pwd)
+LAB_ID='polylinux-fm'
+LAB_TITLE='File Management'
+SYSTEM_PASSWORD=${SYSTEM_PASSWORD:-systemPassword}
+LEVEL_PASSWORD_ROOT=${LEVEL_PASSWORD_ROOT:-levelPassword}
+currentDate=${CURRENT_DATE:-$(date +%Y-%m-%d)}
+export INSTALL_ROOT LAB_ID LAB_TITLE SYSTEM_PASSWORD LEVEL_PASSWORD_ROOT currentDate
 
-export SYSTEM_PASSWORD="systemPassword"
-currentDate=$(date +"%m-%d-%Y" | head -n 1)
-export currentDate
+. "$INSTALL_ROOT/resources.sh"
+. "$INSTALL_ROOT/polylinux-common.sh"
 
-existing_install="no"
-for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
-    if [ -d "/home/fmlab$levelnumber" ] || grep -q "^fmlab$levelnumber:" /etc/passwd 2>/dev/null; then
-        existing_install="yes"
-    fi
-done
-
-if [ -d /opt/fmlab ]; then
-    existing_install="yes"
-fi
-
-if [ "$existing_install" = "yes" ]; then
-    echo "An existing File Manipulation Lab install was found."
-    echo "Run sh cleanup.sh before installing again."
-    exit 1
-fi
-
-confirmation="no"
-while :; do
-    export USER_ID=""
-    echo "Enter your email address (e.g. xyz1234@psu.edu): "
-    read USER_ID
-    printf "Is %s your email address? (y/n) " "$USER_ID"
-    read confirmation
-    case "$confirmation" in
-        y|Y) break ;;
+NON_INTERACTIVE=0
+NO_LOGIN=0
+for arg in "$@"; do
+    case "$arg" in
+        --non-interactive) NON_INTERACTIVE=1 ;;
+        --no-login) NO_LOGIN=1 ;;
+        *) die "unknown option: $arg" ;;
     esac
 done
 
+if [ "$NON_INTERACTIVE" -eq 1 ]; then
+    raw_user=${USER_ID:-student@example.edu}
+else
+    confirmation=n
+    while [ "$confirmation" != y ]; do
+        printf 'Enter your email address: '
+        IFS= read -r raw_user
+        normalized=$(normalize_email "$raw_user")
+        validate_email "$normalized" || { echo 'That address is not valid.' >&2; continue; }
+        printf 'The exercise will use %s. Is that correct? (y/n) ' "$normalized"
+        IFS= read -r confirmation
+    done
+fi
+USER_ID=$(normalize_email "$raw_user")
+validate_email "$USER_ID" || die 'invalid email address after normalization'
+validate_iso_date "$currentDate" || die 'CURRENT_DATE must be YYYY-MM-DD'
+EXERCISE_CODE=$(exercise_code_from_date "$currentDate")
+export USER_ID EXERCISE_CODE
+select_theme
+THEME_OFFSET=$THEME_INDEX
+THEME_STEP=0
+export THEME_OFFSET THEME_STEP
+
+for cmd in adduser awk base64 cat chmod chown cp cut date find grep head id mkdir mv passwd printf rm sed sha256sum sleep sort su tail touch tr uniq wc; do command_required "$cmd"; done
+
 mkdir -p /home
-mkdir -p /opt/fmlab
-chmod 755 /opt /opt/fmlab
+LEGACY_DIRECT=1
+export LEGACY_DIRECT
 
-if [ -f /etc/profile ]; then
-    cp /etc/profile /opt/fmlab/profile.backup
-    chmod 600 /opt/fmlab/profile.backup
-fi
-
-cp profile /etc/profile
-cp nextlevel /usr/bin/nextlevel
-cp prevlevel /usr/bin/prevlevel
-cp validate /usr/bin/validate
-chmod 755 /usr/bin/nextlevel /usr/bin/prevlevel /usr/bin/validate
-
-export origInstallDir=$(pwd)
-levelsetname="fmlab"
-failed_levels=""
-
-echo -n "Building levels [ "
-for levelnumber in 1 2 3 4 5 6 7 8 9 10; do
-    echo -n "$levelnumber "
-    export levelToBuild="$levelsetname$levelnumber"
-    export level_HASH=$(echo -n "$USER_ID$currentDate$SYSTEM_PASSWORD$levelToBuild" | sha256sum | cut -d ' ' -f 1)
-    export readMeLocation="$levelToBuild/README.txt"
-
-    adduser -D -g "User" "$levelToBuild"
-    passwd -d "$levelToBuild" > /dev/null 2>&1
-
-    echo "* Create date: $currentDate" > "/home/$readMeLocation"
-    echo "* User       : $USER_ID" >> "/home/$readMeLocation"
-    echo "***************************************" >> "/home/$readMeLocation"
-    echo "* Instructions for this level:        *" >> "/home/$readMeLocation"
-
-    if "$origInstallDir/$levelsetname$levelnumber.sh"; then
-        :
-    else
-        failed_levels="$failed_levels $levelToBuild"
-    fi
-    cd "$origInstallDir" || exit 1
+cp "$INSTALL_ROOT/profile" /etc/profile
+for helper in nextlevel prevlevel; do
+    cp "$INSTALL_ROOT/$helper" "/usr/bin/$helper"
+    chmod 755 "/usr/bin/$helper"
 done
-echo "]"
 
-if [ -n "$failed_levels" ]; then
-    echo "Build failed for:$failed_levels"
-    echo "Run sh cleanup.sh, fix the errors above, then install again."
-    exit 1
-fi
-
-echo "done"
-
-su - fmlab1
+. "$INSTALL_ROOT/polylinux-parallel-runtime.sh"
+prepare_standard_accounts
+echo "Exercise code: $EXERCISE_CODE"
+start_standard_levels

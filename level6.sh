@@ -20,7 +20,7 @@ for hex in $hex_options; do
     fi
 done
 
-levelinstructions="The cases directory contains readable case directories. The empty old case directory is cases/$target_old. Remove that old case directory, and leave active cases with notes in place. This level practices rmdir. Run validate when finished."
+levelinstructions="The cases directory contains readable case directories. The empty old case directory is cases/$target_old. Remove that old case directory, and leave active cases with notes in place. This level practices rmdir. Record the requested filename or directory name for the external answer form."
 format_block "$levelinstructions" >> "/home/$readMeLocation"
 
 finish_level
