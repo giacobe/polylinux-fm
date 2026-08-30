@@ -21,6 +21,6 @@ for hex in $hex_options; do
 done
 
 levelinstructions="The cases directory contains readable case directories. The empty old case directory is cases/$target_old. Remove that old case directory, and leave active cases with notes in place. This level practices rmdir. Record the requested filename or directory name for the external answer form."
-format_block "$levelinstructions" >> "/home/$readMeLocation"
+format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

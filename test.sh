@@ -36,6 +36,11 @@ for level in 1 2 3 4 5 6 7 8 9 10; do
 done
 sh -n ./install.sh ./resources.sh ./polylinux-common.sh ./polylinux-parallel-runtime.sh
 
+if grep -n '/home/[$]readMeLocation' ./level*.sh; then
+    echo 'legacy level script prepends /home to the absolute README path' >&2
+    exit 1
+fi
+
 if grep -R -n -E 'record_answer|ANSWER_DIR|/answers|checklevel' . \
     --exclude-dir=.git --exclude-dir=provenance --exclude=README.md --exclude=LEVELS.md \
     --exclude=participant-guide.md --exclude=test.sh --exclude=verify.sh; then

@@ -13,6 +13,6 @@ for hex in $hex_options; do
 done
 
 levelinstructions="The evidence directory needs a new file named $target_summary. The directory has other reference notes with normal filenames, but only $target_summary is required. This level practices touch. Record the requested filename or directory name for the external answer form."
-format_block "$levelinstructions" >> "/home/$readMeLocation"
+format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

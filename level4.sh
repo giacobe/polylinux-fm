@@ -13,6 +13,6 @@ done
 echo "suspicious binary sample" > "$home/downloads/$target_threat"
 
 levelinstructions="The downloads directory contains normal-looking files and one suspicious file: $target_threat. Move that suspicious file into quarantine, and leave the other downloads in place. This level practices mv. Record the requested filename or directory name for the external answer form."
-format_block "$levelinstructions" >> "/home/$readMeLocation"
+format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

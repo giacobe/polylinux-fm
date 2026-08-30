@@ -13,6 +13,6 @@ for hex in $hex_options; do
 done
 
 levelinstructions="Your home directory contains readable user log files, such as admins.log and vendors.log. Move the selected log, $target_file, into $target_dir so it no longer remains in your home directory. This level combines mkdir and mv. Record the requested filename or directory name for the external answer form."
-format_block "$levelinstructions" >> "/home/$readMeLocation"
+format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

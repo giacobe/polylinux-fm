@@ -23,6 +23,6 @@ Preserve notes before deeper investigation.
 DATA
 
 levelinstructions="Build the investigation structure $target_root. It should contain $target_evidence_dir and $target_backup_dir directories, and the $target_backup_dir directory should contain a copied version of $target_notes. This level combines mkdir and cp. Record the requested filename or directory name for the external answer form."
-format_block "$levelinstructions" >> "/home/$readMeLocation"
+format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level
