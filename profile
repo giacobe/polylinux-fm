@@ -9,5 +9,4 @@ echo "*  When you think the task is complete, submit the requested answer throug
 echo "*  To change to the next level, issue the command nextlevel.                   *"
 echo "*  To change to the previous level, issue the command prevlevel.               *"
 echo "********************************************************************************"
-echo "* Level      : " $USER
 cat README.txt
