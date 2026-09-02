@@ -2,5 +2,6 @@
 *.sh text eol=lf
 profile text eol=lf
 .profile text eol=lf
+validate text eol=lf
 *.md text eol=lf
 *.json text eol=lf

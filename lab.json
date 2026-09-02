@@ -4,7 +4,7 @@
   "lab_number": 6,
   "title": "File Management",
   "status": "published",
-  "lab_version": "1.0.0",
+  "lab_version": "1.0.1",
   "seed_contract_version": "seed-v1",
   "theme_catalog_version": "themes-v1",
   "level_count": 10,
@@ -16,5 +16,8 @@
   "rootfs_filename": "packaged.rootfs.cpio.gz",
   "max_parallel": 10,
   "client_answer_store": false,
+  "client_correctness_oracle": false,
+  "submission_mechanism": "filesystem-state-key",
+  "state_key_command": "validate",
   "form_url": "https://forms.office.com/Pages/ResponsePage.aspx?id=RY30fNs9iUOpwcEVUm61LvTNagO6dAdDlZnocMnGFFZUREw5RUJVWlJCS1VZWTBQWFNMTUVTVUdNVS4u"
 }

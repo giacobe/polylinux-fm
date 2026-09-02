@@ -12,7 +12,7 @@ for hex in $hex_options; do
 done
 echo "suspicious binary sample" > "$home/downloads/$target_threat"
 
-levelinstructions="The downloads directory contains normal-looking files and one suspicious file: $target_threat. Move that suspicious file into quarantine, and leave the other downloads in place. This level practices mv. Record the requested filename or directory name for the external answer form."
+levelinstructions="The downloads directory contains normal-looking files and one suspicious file: $target_threat. Move that suspicious file into quarantine, and leave the other downloads in place. This level practices mv. Run validate when finished and submit the printed key to the exercise grading form."
 format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

@@ -36,7 +36,7 @@ for hex in $hex_options; do
 done
 mkdir -p "$home/incident/$target_empty_dir"
 
-levelinstructions="Complete the incident response workflow inside incident. Copy $target_backup_log into $target_backup_dir, move $target_quarantine_log into $target_quarantine_dir, remove $unrelated_file, remove the empty directory $target_empty_dir, and create a completion marker named $target_marker in incident. This final level combines mkdir, cp, mv, rm, rmdir, and touch. Record the requested filename or directory name for the external answer form."
+levelinstructions="Complete the incident response workflow inside incident. Copy $target_backup_log into $target_backup_dir, move $target_quarantine_log into $target_quarantine_dir, remove $unrelated_file, remove the empty directory $target_empty_dir, and create a completion marker named $target_marker in incident. This final level combines mkdir, cp, mv, rm, rmdir, and touch. Run validate when finished and submit the printed key to the exercise grading form."
 format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

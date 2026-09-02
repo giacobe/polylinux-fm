@@ -12,7 +12,7 @@ for hex in $hex_options; do
     echo "user activity: $log_file" > "$home/$log_file"
 done
 
-levelinstructions="Your home directory contains readable user log files, such as admins.log and vendors.log. Move the selected log, $target_file, into $target_dir so it no longer remains in your home directory. This level combines mkdir and mv. Record the requested filename or directory name for the external answer form."
+levelinstructions="Your home directory contains readable user log files, such as admins.log and vendors.log. Move the selected log, $target_file, into $target_dir so it no longer remains in your home directory. This level combines mkdir and mv. Run validate when finished and submit the printed key to the exercise grading form."
 format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

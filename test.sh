@@ -34,7 +34,7 @@ done
 for level in 1 2 3 4 5 6 7 8 9 10; do
     sh -n "./level$level.sh"
 done
-sh -n ./install.sh ./resources.sh ./polylinux-common.sh ./polylinux-parallel-runtime.sh
+sh -n ./install.sh ./resources.sh ./polylinux-common.sh ./polylinux-parallel-runtime.sh ./validate
 
 if grep -n '/home/[$]readMeLocation' ./level*.sh; then
     echo 'legacy level script prepends /home to the absolute README path' >&2
@@ -47,4 +47,23 @@ if grep -R -n -E 'record_answer|ANSWER_DIR|/answers|checklevel' . \
     echo 'client-side answer-key reference remains' >&2
     exit 1
 fi
+
+validate_case=$(mktemp -d)
+trap 'rm -rf "$validate_case"' EXIT HUP INT TERM
+mkdir "$validate_case/evidence"
+printf '%s\n' 'fixture' > "$validate_case/evidence/item.txt"
+key_a=$(POLYLINUX_VALIDATE_HOME="$validate_case" USER=level1 sh ./validate | awk '{print $4}')
+key_b=$(POLYLINUX_VALIDATE_HOME="$validate_case" USER=level1 sh ./validate | awk '{print $4}')
+[ "$key_a" = "$key_b" ]
+case "$key_a" in
+    ??????????) ;;
+    *) echo "validate returned a noncanonical key: $key_a" >&2; exit 1 ;;
+esac
+printf '%s\n' 'changed-size' >> "$validate_case/evidence/item.txt"
+key_changed=$(POLYLINUX_VALIDATE_HOME="$validate_case" USER=level1 sh ./validate | awk '{print $4}')
+[ "$key_a" != "$key_changed" ] || {
+    echo 'validate key did not change with filesystem state' >&2
+    exit 1
+}
+grep -F 'cp "$INSTALL_ROOT/validate" /usr/bin/validate' ./install.sh >/dev/null
 echo 'Contract, theme catalog, and shell syntax checks passed.'

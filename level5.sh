@@ -29,7 +29,7 @@ done < "$wordbank_root/$target_dir.txt"
 
 echo "out-of-place item from $bad_source" > "$home/$target_dir/$target_bad"
 
-levelinstructions="The $target_dir directory contains files that belong together. One file came from a different category and does not fit. Remove the out-of-place file, and leave the correct files in place. This level practices rm. Record the requested filename or directory name for the external answer form."
+levelinstructions="The $target_dir directory contains files that belong together. One file came from a different category and does not fit. Remove the out-of-place file, and leave the correct files in place. This level practices rm. Run validate when finished and submit the printed key to the exercise grading form."
 format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

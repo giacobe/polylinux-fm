@@ -14,7 +14,7 @@ for hex in $hex_options; do
     fi
 done
 
-levelinstructions="The workspace directory is missing one case directory named $target_case. Create that directory inside workspace, then submit the requested answer through the external form. This level practices mkdir."
+levelinstructions="The workspace directory is missing one case directory named $target_case. Create that directory inside workspace. This level practices mkdir. Run validate when finished and submit the printed key to the exercise grading form."
 format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

@@ -22,7 +22,7 @@ Case $case_slug opened for suspicious login activity.
 Preserve notes before deeper investigation.
 DATA
 
-levelinstructions="Build the investigation structure $target_root. It should contain $target_evidence_dir and $target_backup_dir directories, and the $target_backup_dir directory should contain a copied version of $target_notes. This level combines mkdir and cp. Record the requested filename or directory name for the external answer form."
+levelinstructions="Build the investigation structure $target_root. It should contain $target_evidence_dir and $target_backup_dir directories, and the $target_backup_dir directory should contain a copied version of $target_notes. This level combines mkdir and cp. Run validate when finished and submit the printed key to the exercise grading form."
 format_block "$levelinstructions" >> "$readMeLocation"
 
 finish_level

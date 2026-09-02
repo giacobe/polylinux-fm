@@ -46,7 +46,7 @@ THEME_OFFSET=$THEME_INDEX
 THEME_STEP=0
 export THEME_OFFSET THEME_STEP
 
-for cmd in adduser awk base64 cat chmod chown cp cut date find grep head id mkdir mv passwd printf rm sed sha256sum sleep sort su tail touch tr uniq wc; do command_required "$cmd"; done
+for cmd in adduser awk base64 cat chmod chown cp cut date find grep head id ls mkdir mv passwd printf rm sed sha256sum sleep sort su tail touch tr uniq wc; do command_required "$cmd"; done
 
 mkdir -p /home
 LEGACY_DIRECT=1
@@ -57,6 +57,8 @@ for helper in nextlevel prevlevel; do
     cp "$INSTALL_ROOT/$helper" "/usr/bin/$helper"
     chmod 755 "/usr/bin/$helper"
 done
+cp "$INSTALL_ROOT/validate" /usr/bin/validate
+chmod 755 /usr/bin/validate
 
 . "$INSTALL_ROOT/polylinux-parallel-runtime.sh"
 prepare_standard_accounts

@@ -2,7 +2,7 @@
 
 This lab uses a level-based structure: the installer creates one Linux user per level, each level opens with a `README.txt`, and learners move between levels with `nextlevel` and `prevlevel`.
 
-Each level is a small file manipulation task. Learners fix the filesystem state, then submit the requested answer through the external form. The validator prints one key generated from the current level user's home directory. It does not print correct or incorrect status, so the key can be submitted through a form or compared against the instructor answer key.
+Each level is a small file manipulation task. Learners fix the filesystem state, run `validate`, and submit its exact 10-character key through the exercise grading form. The validator fingerprints the current level user's home directory. It contains no expected answer and does not print correct or incorrect status; only the external grader evaluates the submitted key.
 
 The validator uses a recursive file listing with `find`, `ls`, `grep`, `awk`, `sed`, `sort`, `sha256sum`, `base64`, and `cut`. It keeps permissions, owner, group, size, and full displayed path, while ignoring date and time fields so timestamps do not break a correct solution.
 
@@ -65,6 +65,6 @@ Licensed under the GNU General Public License v3.0. See `LICENSE`.
 
 ## Standard runtime contract
 
-The current release uses the reversible PolyBandit exercise code, the versioned `seed-v1` deterministic seed, ten concurrent level generators, staged `README.txt` readiness, unrestricted `nextlevel`/`prevlevel` navigation, and no client-side answer store or checker. See `lab.json` for the authoritative level count, theme policy, Buildroot configuration, and browser artifact names.
+The current release uses the reversible PolyBandit exercise code, the versioned `seed-v1` deterministic seed, ten concurrent level generators, staged `README.txt` readiness, unrestricted `nextlevel`/`prevlevel` navigation, and no client-side answer store or correctness checker. Its client-side `validate` command is only a deterministic filesystem-state fingerprint generator. See `lab.json` for the authoritative level count, theme policy, Buildroot configuration, and browser artifact names.
 
 Do not rebuild the assigned Buildroot baseline merely to package this lab. Package the repository payload into the configuration named by `buildroot_configuration`, preserve the baseline kernel, and publish the resulting `packaged.bzImage` and `packaged.rootfs.cpio.gz`.

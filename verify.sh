@@ -2,6 +2,10 @@
 set -eu
 root=${1:-/}
 failed=0
+[ -x "$root/usr/bin/validate" ] || {
+    echo 'validate command is missing or not executable' >&2
+    failed=1
+}
 for level in 1 2 3 4 5 6 7 8 9 10; do
     home="$root/home/level$level"
     if [ ! -f "$home/README.txt" ]; then
@@ -19,4 +23,4 @@ for forbidden in \
     fi
 done
 [ "$failed" -eq 0 ]
-echo 'Packaged level structure contains no lab answer store.'
+echo 'Packaged level structure includes the state-key generator and no lab answer store.'
